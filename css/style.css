@@ -1,0 +1,56 @@
+/*Stylesheet by Erin J. LeFevre, 2020*/
+
+.gratBackground {
+    fill: #D5E3FF;
+}
+
+.gratLines {
+    fill: none;
+    stroke: #999;
+    stroke-width: 1px;
+}
+
+.regions {
+    fill:#296FB3;
+	stroke: #fff;
+	stroke-width: .05px;
+	
+}
+
+.countries {
+	fill: #FFF;
+	stroke: #CCC;
+	stroke-width: 2px;
+}
+
+#mapid {
+    background-color: #000000;    
+    width: 650px;
+    height: 650px;
+    min-height: 100%;
+    min-width: 100%;
+    display: block;
+	align-content: center;
+  
+}
+ 
+#header {
+    background-color: #000000;    
+    width:500px;
+    height: 63px;
+	font-family: Georgia, serif;
+	font-size: 9;
+	color: #f9fbd0;    
+    display: block;
+	
+body {
+  background-color: #000000;
+  align-content: center;
+
+}
+	
+
+	
+	
+	
+	

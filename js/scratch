@@ -1,0 +1,81 @@
+//Erin J. LeFevre, 2020
+//execute script when window is loaded
+
+//begin script when window loads
+window.onload = setMap();
+
+//set up choropleth map
+function setMap(){
+	
+	//dimensions
+	var width = 960,
+		height = 700;
+
+	//create new svg container for the map
+	var map = d3.select("body")
+		.append("svg")
+		.attr("class", "map")
+		.attr("width", width)
+		.attr("height", height);
+
+	//create AlbersUsa equal area conic to include Alaska and Hawaii
+	var projection = d3.geoAlbersUsa()
+		.scale(1000)
+		.translate([width / 2, height / 2]);
+	
+	//create the path generator for the map projection
+	var path = d3.geoPath()
+		.projection(projection);
+
+	//use Promise.all to parallelize asynchronous data loading
+	var promises = [];
+	promises.push(d3.csv("data/wildfires_csv.csv")); //load attributes from csv
+	//promises.push(d3.json("data/CA_MX.topojson")); //load background spatial data
+	promises.push(d3.json("data/us-states_topo.topojson")); //load choropleth spatial data
+	Promise.all(promises).then(callback);
+
+	function callback(data){
+
+		csvData = data[0];
+		//ca_mx = data[1];
+		us_states = data[1];
+
+		/*create graticule generator
+		var graticule = d3.geoGraticule()
+			.step([80, 80]); //place graticule lines every 5 degrees of longitude and latitude
+
+		//create graticule background
+		var gratBackground = map.append("path")
+			.datum(graticule.outline()) //bind graticule background
+			.attr("class", "gratBackground") //assign class for styling
+			.attr("d", path) //project graticule
+
+		//create graticule lines	
+		var gratLines = map.selectAll(".gratLines") //select graticule elements that will be created
+			.data(graticule.lines()) //bind graticule lines to each element to be created
+		  	.enter() //create an element for each datum
+			.append("path") //append each element to the svg as a path element
+			.attr("class", "gratLines") //assign class for styling
+			.attr("d", path); //project graticule lines */
+
+		//translate us_states TopoJSON
+		//var canada_mexico = topojson.feature(ca_mx, ca_mx.objects.collection),
+			states_background = topojson.feature(us_states, us_states.objects.collection).features;
+		
+		//add Canada/Mexico background countries
+		//var countries = map.append("path")
+			//.datum(canada_mexico)
+			//.attr("class", "countries")
+			//.attr("d", path);
+
+		//add U.S states (choropleth)
+		var regions = map.selectAll(".regions")
+			.data(states_background)
+			.enter()
+			.append("path")
+			.attr("class", function(d){
+				return d.properties.name;
+			})
+			.attr("d", path);
+	};
+};
