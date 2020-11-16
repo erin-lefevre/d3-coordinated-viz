@@ -9,9 +9,9 @@ var attrArray = ["2015", "2016", "2017", "2018", "2019"];
 //list of attributes
 var expressed = attrArray[0]; //start
 	
-//chart frame dimensions  - Formerly under: FUNCTION - CREATE COORDINATED BAR CHART
-var chartWidth = window.innerWidth * 0.32,
-    chartHeight = 250,
+//chart frame dimensions
+var chartWidth = window.innerWidth * 0.22,
+    chartHeight = 300,
     leftPadding = 30,
     rightPadding = 0,
     topBottomPadding =0,
@@ -32,11 +32,11 @@ window.onload = setMap();
 function setMap(){
 	
 	//dimensions
-	var width = window.innerWidth * 0.52;
-		height = 500;
+	var width = window.innerWidth * 0.39;
+		height = 400;
 
 	//create new svg container for the map
-	var map = d3.select("body")
+	var map = d3.select("#mapContainer")
 		.append("svg")
 		.attr("class", "map")
 		.attr("width", width)
@@ -44,7 +44,7 @@ function setMap(){
 
 	//create AlbersUSA equal area conic to include Alaska and Hawaii
 	var projection = d3.geoAlbersUsa()
-		.scale(1000)
+		.scale(800)
 		.translate([width / 2, height / 2]);
 	
 	//create the path generator for the map projection
@@ -137,11 +137,11 @@ console.log(states_background);
 function makeColorScale(data){
 	var colorClasses = [
 	"#f8e2cc",
-        "#fbd1a3",
-        "#facba2",
-        "#f68f4c",
-        "#d65436",
-	"#b52025"		
+     "#fbd1a3",
+     "#facba2",
+     "#f68f4c",
+     "#d65436",
+	 "#b52025"		
 		
     ];
 	
@@ -206,7 +206,7 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
         })
         .on("mousemove", moveLabel);
     
-    //below Example 2.2 line 16...add style descriptor to each path
+    //adds a white stroke to regions
     var desc = regions.append("desc")
     .text('{"stroke": "#fff", "stroke-width": "0.5px"}');
 };
@@ -217,7 +217,7 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
 function setChart(csvData, colorScale){
 
     //create a second svg element to hold the bar chart
-    var chart = d3.select("body")
+    var chart = d3.select("#chartContainer")
         .append("svg")
         .attr("width", chartWidth)
         .attr("height", chartHeight)
@@ -253,10 +253,10 @@ function setChart(csvData, colorScale){
 
     //create a text element for the chart title
     var chartTitle = chart.append("text")
-        .attr("x", 47)
-        .attr("y", 15)
+        .attr("x", 50)
+        .attr("y", 25)
         .attr("class", "chartTitle")
-        .text("Percent of the state burned in wildfires.");
+        .text("% burned");
 
     //create vertical axis generator
     var yAxis = d3.axisLeft()
@@ -313,8 +313,8 @@ function changeAttribute(attribute, csvData){
     csvmax = d3.max(csvData, function(d) { return parseFloat(d[expressed]); });
     
     var yScale = d3.scaleLinear()
-    .range([chartHeight - 6, 0])
-    .domain([0, 2.1*1]);
+    .range([chartHeight - 5, 20])
+    .domain([0, 2]);
 	
 	
     //updata vertical axis 
