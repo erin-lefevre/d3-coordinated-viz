@@ -4,24 +4,24 @@
 (function(){
 
 //attributes from csv - pseudo-global variables
-var attrArray = ["2015", "2016", "2017", "2018", "2019"]; 
+var attrArray = ["2014_yr", "2015_yr", "2016_yr", "2017_yr", "2018_yr", "2019_yr"]; 
 
 //list of attributes
 var expressed = attrArray[0]; //start
 	
 //chart frame dimensions  - Formerly under: FUNCTION - CREATE COORDINATED BAR CHART
 var chartWidth = window.innerWidth * 0.32,
-    chartHeight = 250,
+    chartHeight = 325,
     leftPadding = 30,
-    rightPadding = 0,
-    topBottomPadding =0,
+    rightPadding = 2,
+    topBottomPadding =6,
     chartInnerWidth = chartWidth - leftPadding - rightPadding,
     chartInnerHeight = chartHeight - topBottomPadding * 0,
     translate = "translate(" + leftPadding + "," + topBottomPadding + ")";
 	
 var yScale = d3.scaleLinear()
-    .range([chartHeight - 5, 20])
-    .domain([0, 2]);
+    .range([chartHeight - 20, 0])
+    .domain([0, 3*1]);
 
 //begin script when window loads
 window.onload = setMap();
@@ -32,7 +32,7 @@ window.onload = setMap();
 function setMap(){
 	
 	//dimensions
-	var width = window.innerWidth * 0.52;
+	var width = window.innerWidth * 0.40;
 		height = 500;
 
 	//create new svg container for the map
@@ -44,7 +44,7 @@ function setMap(){
 
 	//create AlbersUSA equal area conic to include Alaska and Hawaii
 	var projection = d3.geoAlbersUsa()
-		.scale(1000)
+		.scale(1100)
 		.translate([width / 2, height / 2]);
 	
 	//create the path generator for the map projection
@@ -136,12 +136,12 @@ console.log(states_background);
 
 function makeColorScale(data){
 	var colorClasses = [
-	"#f8e2cc",
-        "#fbd1a3",
-        "#facba2",
-        "#f68f4c",
-        "#d65436",
-	"#b52025"		
+		"#D4B9DA",
+        "#C994C7",
+        "#DF65B0",
+        "#DD1C77",
+        "#980043",
+		"#380043"		
 		
     ];
 	
@@ -185,20 +185,21 @@ function choropleth(props, colorScale){
 	
 	
 //FUNCTION SETENUMERATION UNITS	
-function setEnumerationUnits(franceRegions, map, path, colorScale){
+function setEnumerationUnits(states_background, map, path, colorScale){
     
-    var regions = map.selectAll(".regions")
-        .data(franceRegions)
-        .enter()
-        .append("path")
-        .attr("class", function(d){
-            return "regions " + d.properties.name;
-        })
-        .attr("d", path)
-        .style("fill", function(d){
+	//add US states
+	var regions = map.selectAll(".regions")
+		.data(states_background)
+		.enter()
+		.append("path")
+		.attr("class", function(d){
+			return "regions " + d.properties.name;
+		})
+		.attr("d", path)
+		.style("fill", function(d){
             return choropleth(d.properties, colorScale);
         })
-        .on("mouseover", function(d){
+		.on("mouseover", function(d){
             highlight(d.properties);
         })
         .on("mouseout", function(d){
@@ -208,13 +209,14 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
     
     //below Example 2.2 line 16...add style descriptor to each path
     var desc = regions.append("desc")
-    .text('{"stroke": "#fff", "stroke-width": "0.5px"}');
-};
+    .text('{"stroke": "#000", "stroke-width": "0.5px"}');
+};	
 	
 
 	
-//function to create coordinated bar chart
+//FUNCTION - CREATE COORDINATED BAR CHART
 function setChart(csvData, colorScale){
+    
 
     //create a second svg element to hold the bar chart
     var chart = d3.select("body")
@@ -229,7 +231,7 @@ function setChart(csvData, colorScale){
         .attr("width", chartInnerWidth)
         .attr("height", chartInnerHeight)
         .attr("transform", translate);
-
+     
 
     //set bars for each province
     var bars = chart.selectAll(".bar")
@@ -247,16 +249,16 @@ function setChart(csvData, colorScale){
         .on("mouseout", dehighlight)
         .on("mousemove", moveLabel);
 
-    //below Example 2.2 line 31...add style descriptor to each rect
-    var desc = bars.append("desc")
+	var desc = bars.append("desc")
     .text('{"stroke": "none", "stroke-width": "0px"}');
-
-    //create a text element for the chart title
-    var chartTitle = chart.append("text")
-        .attr("x", 47)
-        .attr("y", 15)
+	
+	//Code for labeling the bars directly would go here. Label Y axis instead.	
+	
+	var chartTitle = chart.append("text")
+        .attr("x", 60)
+        .attr("y", 20)
         .attr("class", "chartTitle")
-        .text("Percent of the state burned in wildfires.");
+        .text("Percent of the state burned in wildfires for the chosen year.");
 
     //create vertical axis generator
     var yAxis = d3.axisLeft()
@@ -274,11 +276,11 @@ function setChart(csvData, colorScale){
         .attr("width", chartInnerWidth)
         .attr("height", chartInnerHeight)
         .attr("transform", translate);
-
-    //set bar positions, heights, and colors
+	//set bar positions, heights, and colors
     updateChart(bars, csvData.length, colorScale);
 };
-//Example 1.1 line 1...function to create a dropdown menu for attribute selection
+
+//FUNCTION CREATE DROPDOWN MENU - SELECT BY YEAR	
 function createDropdown(csvData){
     //add select element
     var dropdown = d3.select("body")
@@ -292,7 +294,7 @@ function createDropdown(csvData){
     var titleOption = dropdown.append("option")
         .attr("class", "titleOption")
         .attr("disabled", "true")
-        .text("Select Year");
+        .text("Select Data Year");
 
     //add attribute name options
     var attrOptions = dropdown.selectAll("attrOptions")
@@ -301,23 +303,25 @@ function createDropdown(csvData){
         .append("option")
         .attr("value", function(d){ return d })
         .text(function(d){ return d });
-};
-
-//Example 1.4 line 14...dropdown change listener handler
+};	
+	
+//FUNCTION CHANGE ATTRIBUTE IN DROPDOWN BOX
+	
 function changeAttribute(attribute, csvData){
-    //change the expressed attribute
-    expressed = attribute;
-
-
-    // change yscale dynamically
-    csvmax = d3.max(csvData, function(d) { return parseFloat(d[expressed]); });
-    
-    var yScale = d3.scaleLinear()
-    .range([chartHeight - 6, 0])
-    .domain([0, 2.1*1]);
+	expressed = attribute;
 	
+	//Change the Y scale dynamically
+	csvmax = d3.max(csvData, function(d) { return
+	parseFloat(d[expressed]); });
 	
-    //updata vertical axis 
+	var yScale = d3.scaleLinear()
+    .range([chartHeight - 20, 0])
+    .domain([0, 3*1]);
+	
+		
+	
+	//new
+	//updata vertical axis 
     d3.select(".axis").remove();
     var yAxis = d3.axisLeft()
         .scale(yScale);
@@ -355,7 +359,7 @@ function changeAttribute(attribute, csvData){
 
     updateChart(bars, csvData.length, colorScale);
 };
-
+	
 //function to position, size, and color bars in chart
 function updateChart(bars, n, colorScale){
     //position bars
@@ -372,29 +376,30 @@ function updateChart(bars, n, colorScale){
         //color/recolor bars
         .style("fill", function(d){
             return choropleth(d, colorScale);
-        });    
-    
+        });
+    //add text to chart title
+    var chartTitle = d3.select(".chartTitle")
+        .text("Percent of the state burned in wildfires for the chosen year.");
 };
 
 //function to highlight enumeration units and bars
 function highlight(props){
     //change stroke
-    var selected = d3.selectAll("." + props.name)
-        .style("stroke", "#fff")
-        .style("stroke-width", "2")
-		 .style("stroke2", "#fff");
+    var selected = d3.selectAll("." + props.properties)
+        .style("stroke", "blue")
+        .style("stroke-width", "2");
     
     setLabel(props);
 };
 
 //function to reset the element style on mouseout
 function dehighlight(props){
-    var selected = d3.selectAll("." + props.name)
+    var selected = d3.selectAll("." + props.properties)
         .style("stroke", function(){
             return getStyle(this, "stroke")
         })
         .style("stroke-width", function(){
-            return getStyle(this, "regions")
+            return getStyle(this, "stroke-width")
         });
     
     //below Example 2.4 line 21...remove info label
@@ -412,7 +417,7 @@ function dehighlight(props){
     };
 };
 
-//function to create dynamic label
+/*//function to create dynamic label
 function setLabel(props){
     //label content
     var labelAttribute = "<h1>" + props[expressed] +
@@ -428,7 +433,7 @@ function setLabel(props){
     var regionName = infolabel.append("div")
         .attr("class", "labelname")
         .html(props.name);
-};
+};*/
 
 //function to move info label with mouse
 //Example 2.8 line 1...function to move info label with mouse
