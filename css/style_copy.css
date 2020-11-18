@@ -1,37 +1,70 @@
 /*Stylesheet by Erin J. LeFevre, 2020*/
 
-html{
-  padding-top: 20px;
-  margin: 0;
+.chartTitle {
+	font-family: sans-serif;
+	font-size: 0.75em;
+	font-weight: 200;
+    fill: #b52025;
 }
-		
+
+@media only screen and (min-width: 1025px) {
+.grid-container {
+    display: grid;
+    grid-template-columns: .7fr 1.2fr 1fr;
+    grid-gap: 0px;
+	}
+}
+
+#aboutContainer {	
+	float: left;
+	margin-right: 50px;
+}
+
+#mapContainer {	
+	float: left;
+    	
+}
+
+#chartContainer {
+  
+  border: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+    
+}
+
+#copy{
+    text-align: justify;
+	width: 65%;
+	height: 145px;
 	
-body{
-  padding: 0;
-  margin: 0;
-  background-color: #d3beab;	
+}
+
+p {
+    font-family: sans-serif;
+	font-size: .85em;
+	margin-left: 30px;
+	text-align: justify;
+	
+}
+
+hr {
+    border: .25px dashed #d65436;
+	margin-left: 30px;
+	
+}
+
+h2 {
+	font-family: sans-serif;
+	margin-left: 30px;
+	margin-top: 40px;
+	color: #b52025;
+	font-weight: 100;
+	
 }
 
 h4 {
-	font-family: sans-serif;
-	margin-left: 30px;
-	margin-top: 40px;
-	color: #b52025;
-	font-weight: 100;
-	
-}
-
-footer h5 {
-	font-family: sans-serif;
-	margin-left: 30px;
-	margin-top: 40px;
-	color: #b52025;
-	font-weight: 100;
-	
-}
-
-
-header h2 {
 	font-family: sans-serif;
 	margin-left: 30px;	
 	color: #b52025;
@@ -40,81 +73,6 @@ header h2 {
 	
 }
 
-header p {
-    font-family: sans-serif;
-	font-size: .85em;
-	margin-left: 30px;
-	text-align: justify-all;
-	width: 850px;
-		
-}
-
-.chartTitle {
-	font-family: sans-serif;
-	font-size: 0.75em;
-	font-weight: 200;
-    fill: #b52025;
-}
-
-.grid-container { /*Wrapper*/
-    display: grid;
-    grid-template-columns: .7fr 1.2fr 1fr;
-	grid-template-rows: 5fr 20fr 7fr;
-    grid-gap: 20px;
-	height: 720px;
-	
-	
-	}
-
-
-header { /*Copy*/
-  grid-column-start: 1;
-  grid-column-end: 4;
-  text-align: justify;
-  background-color: #d3beab;
-  padding: 0;
-
-
-}
-
-footer { /*New*/
-  grid-column-start: 1;
-  grid-column-end: 4;
-  background-color: #d3beab;  
-	padding: 0;
-	margin: 0;
-}
-
-
-.aboutContainer {	
-   text-align: justify;	
-	
-}
-
-.mapContainer {	
-	
-	    	
-}
-
-.chartContainer {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: center;
-     
-}
-
-p {
-    font-family: sans-serif;
-	font-size: .85em;
-	margin-left: 30px;
-	text-align: justify;		
-}
-
-hr {
-    border: .10px dashed #d65436;
-	margin-left: 30px;
-	
-}
 
 .chart {
 	
@@ -145,8 +103,8 @@ hr {
 
 .dropdown {
     position: absolute;
-    top: 560px;
-    left: 30px;
+    top: 550px;
+    left: 38px;
     z-index: 10;
     font-family: sans-serif;
     font-size: .75em;
@@ -165,10 +123,11 @@ option {
 
 .infolabel {
 	position: fixed;
-	height: 30px;
+	height: 35px;
 	min-width: 50px;
 	color: white;
-	background-color: #47413a;	
+	background-color: black;
+	border: solid thin #000;
 	border-radius: 6px 6px 6px 6px;
 	padding: 5px 5px;   
 	top: -75px;
@@ -181,8 +140,6 @@ option {
 	padding: 0;
 	display: inline-block;
 	line-height: 1em;
-	font-size: 1.4em;
-	font-weight: 200
 }
 	
 
@@ -257,23 +214,6 @@ a:hover {
 a:active {
   text-decoration: none;
 }
-
-a:link {
-  color: #b52025;;
-}
-
-/* visited link */
-a:visited {
-  color: #b52025;
-}
-
-/* mouse over link */
-a:hover {
-  color: #d65436;
-}
-
-
-
 
 
 

@@ -1,15 +1,15 @@
 //Erin J. LeFevre, 2020
 
-//Anonymous function - local scope
+//Anonymous function
 (function(){
 
-//attributes from csv - pseudo-global variables
+//Wildfire attributes
 var attrArray = ["2015", "2016", "2017", "2018", "2019"]; 
 
 //list of attributes
 var expressed = attrArray[0]; //start
 	
-//chart frame dimensions
+//Chart dimensions
 var chartWidth = window.innerWidth * 0.22,
     chartHeight = 300,
     leftPadding = 30,
@@ -23,12 +23,12 @@ var yScale = d3.scaleLinear()
     .range([chartHeight - 5, 20])
     .domain([0, 2]);
 
-//begin script when window loads
+//Start
 window.onload = setMap();
 	
 	
 //FUNCTION SETMAP
-//set up choropleth: FUNCTION SETMAP
+//set up choropleth:
 function setMap(){
 	
 	//dimensions
@@ -36,7 +36,7 @@ function setMap(){
 		height = 400;
 
 	//create new svg container for the map
-	var map = d3.select("#mapContainer")
+	var map = d3.select(".mapContainer")
 		.append("svg")
 		.attr("class", "map")
 		.attr("width", width)
@@ -65,7 +65,7 @@ function setMap(){
 	//FUNCTION CALLBACK
 	function callback(data){ 
 
-		csvData = data[0];		//***DEVIATES FROM Example (Works)
+		csvData = data[0];		
 		us_states = data[1];		
 		
 		//translate us_states TopoJSON		
@@ -85,8 +85,7 @@ function setMap(){
 		setChart(csvData, colorScale);	
 		
 		//dropdown menu
-		createDropdown(csvData);
-		
+		createDropdown(csvData);	
 		
 		
 	
@@ -96,7 +95,7 @@ function setMap(){
 	
 
 //FUNCTION JOIN DATA
-//loop through the csv to and join
+//loop through the csv & join
 function joinData(states_background, csvData){
 	
 	for (var i=0;i<csvData.length; i++){
@@ -132,8 +131,7 @@ console.log(states_background);
 
 	
 //FUNCTION - Quantile
-//Classify the data - Use Natural Breaks color scale
-
+//Classify the data into six classes (color palette below)
 function makeColorScale(data){
 	var colorClasses = [
 	"#f8e2cc",
@@ -162,13 +160,10 @@ function makeColorScale(data){
 	console.log(domainArray);
 
     return colorScale;
-};
-	
-	
+};	
 	
 	
 //FUNCTION CHOROPLETH - test for missing data values
-
 function choropleth(props, colorScale){
 	
     //make sure attribute value is a number
@@ -209,15 +204,14 @@ function setEnumerationUnits(franceRegions, map, path, colorScale){
     //adds a white stroke to regions
     var desc = regions.append("desc")
     .text('{"stroke": "#fff", "stroke-width": "0.5px"}');
-};
-	
+};	
 
 	
 //function to create coordinated bar chart
 function setChart(csvData, colorScale){
 
     //create a second svg element to hold the bar chart
-    var chart = d3.select("#chartContainer")
+    var chart = d3.select(".chartContainer")
         .append("svg")
         .attr("width", chartWidth)
         .attr("height", chartHeight)
@@ -247,7 +241,7 @@ function setChart(csvData, colorScale){
         .on("mouseout", dehighlight)
         .on("mousemove", moveLabel);
 
-    //below Example 2.2 line 31...add style descriptor to each rect
+    //From Example 2.2 line 31
     var desc = bars.append("desc")
     .text('{"stroke": "none", "stroke-width": "0px"}');
 
